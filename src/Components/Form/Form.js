@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import './Form.css';
+// import './Form.css';
 
 class Form extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       name: "",
       date: "",
@@ -12,14 +12,38 @@ class Form extends Component {
     }
   }
 
+  handleChange = (event) => {
+  const { name, value } = event.target
+  this.setState({ [name]: value })
+}
+
+  saveReservation = (event) => {
+    event.preventDefault()
+    const newRes = {
+      ...this.state,
+      id: Date.now()
+    }
+    this.props.addReservation(newRes)
+    this.clearForm()
+  }
+
+  clearForm = () => {
+    this.setState({
+      name: "",
+      date: "",
+      time: "",
+      number: ""
+    })
+  }
+
   render() {
     return (
       <form className="form-input">
-        <input className="name-input" type="text" placeholder="Name" value={this.state.name}></input>
-        <input className="date-input" type="text" placeholder="Date" value={this.state.date}></input>
-        <input className="time-input" type="text" placeholder="Time" value={this.state.time}></input>
-        <input className="guest-input" type="number" placeholder="Number of guests" value={this.state.number}></input>
-        <button>Make A Reservation</button>
+        <input className="name-input" name="name" type="text" placeholder="Name" value={this.state.name} onChange={this.handleChange}></input>
+        <input className="date-input" name="date" type="text" placeholder="Date (mm/dd)" value={this.state.date} onChange={this.handleChange}></input>
+        <input className="time-input" name="time" type="text" placeholder="Time" value={this.state.time} onChange={this.handleChange}></input>
+        <input className="guest-input" name="number" type="number" placeholder="Number of guests" value={this.state.number} onChange={this.handleChange}></input>
+        <button onClick={this.saveReservation}>Make A Reservation</button>
       </form>
     )
   }
